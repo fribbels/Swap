@@ -1,19 +1,89 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="@drawable/gradient"
-    tools:context="ivanc.swap.FullscreenActivity">
+    android:gravity="center"
+    android:weightSum="2"
+    tools:context="ivanc.swap.LoginPage"
+    android:layout_height="match_parent">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logo"
-        android:id="@+id/imageView2" />
-</FrameLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ImageView
+            android:layout_width="135dp"
+            android:layout_height="127dp"
+            android:src="@drawable/logo"
+            android:id="@+id/imageView8"
+            android:gravity="center" />
+
+        <TextView
+            android:text="Swap"
+            android:layout_width="91dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView5"
+            android:gravity="center"
+            tools:text="swap"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+            android:fontFamily="cursive"
+            android:textSize="40sp"
+            android:textStyle="normal|bold"
+            android:textAlignment="center"
+            android:textColor="#a6e8d2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:weightSum="1">
+
+        <TextView
+            android:text="Hi! What's your name?"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView6"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:textColor="#a6e8d2"/>
+
+        <EditText
+            android:layout_width="293dp"
+            android:layout_height="40dp"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editText"
+            android:background="@drawable/grey_input_box"
+            android:textAlignment="center"
+            android:hint="Username" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <Button
+            android:text="Get started"
+            android:layout_width="293dp"
+            android:background="@drawable/rounded_button"
+            android:id="@+id/button3"
+            android:layout_height="40dp"
+            android:onClick="getStartedClicked"/>
+    </LinearLayout>
+
+</LinearLayout>
