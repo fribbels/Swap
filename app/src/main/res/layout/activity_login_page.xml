@@ -1,19 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ivanc.swap.LoginPageActivity"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@drawable/gradient"
     android:gravity="center"
     android:weightSum="2"
-    tools:context="ivanc.swap.LoginPage"
     android:layout_height="match_parent">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
 
 
     <LinearLayout
@@ -81,7 +76,7 @@
             android:text="Get started"
             android:layout_width="293dp"
             android:background="@drawable/rounded_button"
-            android:id="@+id/button3"
+            android:id="@+id/getStartedButton"
             android:layout_height="40dp"
             android:onClick="getStartedClicked"/>
     </LinearLayout>
