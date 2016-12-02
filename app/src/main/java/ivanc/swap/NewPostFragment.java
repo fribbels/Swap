@@ -6,10 +6,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +36,9 @@ public class NewPostFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private FirebaseConnection firebaseConnection;
+
+    private EditText newPostEditText;
+    private Button newPostSubmitButton;
 
     public NewPostFragment() {
         // Required empty public constructor
@@ -68,10 +76,31 @@ public class NewPostFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        final Button newPostSubmitButton = (Button)getView().findViewById(R.id.new_post_submit);
+        newPostEditText = (EditText)getView().findViewById(R.id.new_post_text);
+        newPostSubmitButton = (Button)getView().findViewById(R.id.new_post_submit);
+
+        InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(newPostEditText.getWindowToken(), 0);
+
+        newPostEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(newPostEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                return handled;
+            }
+        });
+
         newPostSubmitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                firebaseConnection.makePost(new Post("POST FROM APP"));
+                String title = newPostEditText.getText().toString();
+                firebaseConnection.makePost(new Post(title));
+                Log.v("*********", "TIT:E" + title);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(newPostEditText.getWindowToken(), 0);
             }
         });
     }

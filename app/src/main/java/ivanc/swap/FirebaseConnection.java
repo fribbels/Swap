@@ -99,7 +99,7 @@ public class FirebaseConnection extends AppCompatActivity {
                 localPosts = new ArrayList<Post>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Map<String, String> data = (Map)snapshot.getValue();
-                    String text = data.get("text");
+                    String text = data.get("title");
 
                     Log.v("***********", "New post: " + data);
 

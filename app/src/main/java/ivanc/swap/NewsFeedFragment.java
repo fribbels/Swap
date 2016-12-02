@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -69,16 +70,21 @@ public class NewsFeedFragment extends Fragment {
         posts.add(new Post("Winter jacket4sale"));
         posts.add(new Post("Will mow your lawn. All day long."));
 
-        this.posts = posts;
+//        this.posts = posts;
     }
 
     public void updatePosts(List<Post> posts) {
-        this.posts = posts;
+        this.posts.clear();
+        this.posts.addAll(posts);
+
+        listView.setAdapter(new PostListAdapter(this.context, this.posts));
+        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged(); // Uh?
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        posts = new ArrayList<>();
         postListAdapter = new PostListAdapter(this.context, this.posts);
     }
 

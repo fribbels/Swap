@@ -12,7 +12,8 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/new_post_text"
-        tools:text="Title" />
+        tools:text="Title"
+        android:imeOptions="actionDone" />
 
     <Button
         android:text="Button"
