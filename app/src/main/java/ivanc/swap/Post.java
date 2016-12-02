@@ -6,12 +6,22 @@ package ivanc.swap;
 
 public class Post {
     private String title;
+    private String description;
 
     public Post (String title) {
         this.title = title;
+        this.description = "";
+    }
+
+    public Post (String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 
     public String getTitle () {
         return title;
+    }
+    public String getDescription () {
+        return description;
     }
 }

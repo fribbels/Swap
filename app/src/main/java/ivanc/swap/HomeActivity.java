@@ -20,11 +20,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class HomeActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
                    AboutFragment.OnFragmentInteractionListener,
                    NewsFeedFragment.OnFragmentInteractionListener,
-                   ChatFragment.OnFragmentInteractionListener {
+                   ChatFragment.OnFragmentInteractionListener,
+                   NewPostFragment.OnFragmentInteractionListener,
+                   ProfileFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -36,11 +40,18 @@ public class HomeActivity extends FragmentActivity
      */
     private CharSequence mTitle;
 
+    private NewsFeedFragment newsFeedFragment;
+    private ChatFragment chatFragment;
+    private AboutFragment aboutFragment;
+
+    private FirebaseConnection firebaseConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        firebaseConnection = new FirebaseConnection(this);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -49,6 +60,10 @@ public class HomeActivity extends FragmentActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    public void updatePosts(List<Post> posts) {
+
     }
 
     @Override
@@ -62,9 +77,15 @@ public class HomeActivity extends FragmentActivity
                 fragment = new NewsFeedFragment();
                 break;
             case 1:
-                fragment = new ChatFragment();
+                fragment = new ProfileFragment();
                 break;
             case 2:
+                fragment = new NewPostFragment();
+                break;
+            case 3:
+                fragment = new ChatFragment();
+                break;
+            case 4:
                 fragment = new AboutFragment();
                 break;
             default:
@@ -78,13 +99,16 @@ public class HomeActivity extends FragmentActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = "SEC1";//getString(R.string.title_section1);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = "SEC2";//getString(R.string.title_section2);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = "SEC3";//getString(R.string.title_section3);
+                break;
+            case 4:
+                mTitle = "SEC4";//getString(R.string.title_section4);
                 break;
         }
     }

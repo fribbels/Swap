@@ -7,20 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewsFeedFragment.OnFragmentInteractionListener} interface
+ * {@link NewPostFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewsFeedFragment#newInstance} factory method to
+ * Use the {@link NewPostFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsFeedFragment extends Fragment {
+public class NewPostFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,11 +28,9 @@ public class NewsFeedFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private PostListAdapter postListAdapter;
-    private Context context;
-    private ListView listView;
-    private List<Post> posts;
-    private FirebaseConnection firebaseConnection;
+    public NewPostFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -44,11 +38,11 @@ public class NewsFeedFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NewsFeedFragment.
+     * @return A new instance of fragment NewPostFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewsFeedFragment newInstance(String param1, String param2) {
-        NewsFeedFragment fragment = new NewsFeedFragment();
+    public static NewPostFragment newInstance(String param1, String param2) {
+        NewPostFragment fragment = new NewPostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -57,54 +51,36 @@ public class NewsFeedFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
-
-
-        List<Post> posts = new ArrayList<>();
-        posts.add(new Post("Test"));
-        posts.add(new Post("Extra meatloaf!!!"));
-        posts.add(new Post("Offering 'backrub' ;) ;)"));
-        posts.add(new Post("Winter jacket4sale"));
-        posts.add(new Post("Will mow your lawn. All day long."));
-
-        this.posts = posts;
-    }
-
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        postListAdapter = new PostListAdapter(this.context, this.posts);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_news_feed, container, false);
-        listView = (ListView) rootView.findViewById(R.id.postListView);
-        listView.setAdapter(this.postListAdapter);
-        return rootView;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_new_post, container, false);
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() { super.onResume(); }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
