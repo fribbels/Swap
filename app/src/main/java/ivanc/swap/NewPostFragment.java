@@ -1,12 +1,15 @@
 package ivanc.swap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +30,7 @@ public class NewPostFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private FirebaseConnection firebaseConnection;
 
     public NewPostFragment() {
         // Required empty public constructor
@@ -41,12 +45,8 @@ public class NewPostFragment extends Fragment {
      * @return A new instance of fragment NewPostFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewPostFragment newInstance(String param1, String param2) {
+    public static NewPostFragment newInstance() {
         NewPostFragment fragment = new NewPostFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -66,6 +66,19 @@ public class NewPostFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_new_post, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        final Button newPostSubmitButton = (Button)getView().findViewById(R.id.new_post_submit);
+        newPostSubmitButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                firebaseConnection.makePost(new Post("POST FROM APP"));
+            }
+        });
+    }
+
+    public void setupFirebaseConnection(FirebaseConnection firebaseConnection) {
+        this.firebaseConnection = firebaseConnection;
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

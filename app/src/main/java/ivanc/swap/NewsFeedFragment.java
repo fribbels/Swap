@@ -72,6 +72,9 @@ public class NewsFeedFragment extends Fragment {
         this.posts = posts;
     }
 
+    public void updatePosts(List<Post> posts) {
+        this.posts = posts;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

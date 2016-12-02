@@ -18,6 +18,7 @@
         android:text="Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/new_post_submit" />
+        android:id="@+id/new_post_submit"
+        android:onClick="newPostSubmitClicked" />
 
 </LinearLayout>

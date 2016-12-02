@@ -43,6 +43,8 @@ public class HomeActivity extends FragmentActivity
     private NewsFeedFragment newsFeedFragment;
     private ChatFragment chatFragment;
     private AboutFragment aboutFragment;
+    private ProfileFragment profileFragment;
+    private NewPostFragment newPostFragment;
 
     private FirebaseConnection firebaseConnection;
 
@@ -50,6 +52,7 @@ public class HomeActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+//        initializeFragments();
 
         firebaseConnection = new FirebaseConnection(this);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -60,8 +63,16 @@ public class HomeActivity extends FragmentActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-    }
 
+    }
+//
+//    public void initializeFragments() {
+//        newsFeedFragment = new NewsFeedFragment();
+//        chatFragment = new ChatFragment();
+//        aboutFragment = new AboutFragment();
+//        profileFragment = new ProfileFragment();
+//        newPostFragment = new NewPostFragment();
+//    }
     public void updatePosts(List<Post> posts) {
 
     }
@@ -74,19 +85,25 @@ public class HomeActivity extends FragmentActivity
 
         switch (position) {
             case 0:
-                fragment = new NewsFeedFragment();
+                fragment = new NewsFeedFragment(); //new NewsFeedFragment();
+                newsFeedFragment = (NewsFeedFragment)fragment;
                 break;
             case 1:
-                fragment = new ProfileFragment();
+                fragment = new ProfileFragment(); //new ProfileFragment();
+                profileFragment = (ProfileFragment)fragment;
                 break;
             case 2:
-                fragment = new NewPostFragment();
+                fragment = new NewPostFragment(); //new NewPostFragment();
+                newPostFragment = (NewPostFragment)fragment;
+                newPostFragment.setupFirebaseConnection(firebaseConnection);
                 break;
             case 3:
-                fragment = new ChatFragment();
+                fragment = new ChatFragment(); //new ChatFragment();
+                chatFragment = (ChatFragment)fragment;
                 break;
             case 4:
                 fragment = new AboutFragment();
+                aboutFragment = (AboutFragment)fragment;
                 break;
             default:
         }
