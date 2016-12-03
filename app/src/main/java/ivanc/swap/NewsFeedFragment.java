@@ -4,9 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,9 +34,11 @@ public class NewsFeedFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public NewsFeedFragment() {
-        // Required empty public constructor
-    }
+    private PostListAdapter postListAdapter;
+    private Context context;
+    private ListView listView;
+    private List<Post> posts;
+    private FirebaseConnection firebaseConnection;
 
     /**
      * Use this factory method to create a new instance of
@@ -51,37 +59,59 @@ public class NewsFeedFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+
+
+        List<Post> posts = new ArrayList<>();
+        posts.add(new Post("Test"));
+        posts.add(new Post("Extra meatloaf!!!"));
+        posts.add(new Post("Offering 'backrub' ;) ;)"));
+        posts.add(new Post("Winter jacket4sale"));
+        posts.add(new Post("Will mow your lawn. All day long."));
+
+//        this.posts = posts;
+    }
+
+    public void updatePosts(List<Post> posts) {
+        this.posts.clear();
+        this.posts.addAll(posts);
+
+        listView.setAdapter(new PostListAdapter(this.context, this.posts));
+        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged(); // Uh?
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        posts = new ArrayList<>();
+        postListAdapter = new PostListAdapter(this.context, this.posts);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news_feed, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        View rootView = inflater.inflate(R.layout.fragment_news_feed, container, false);
+        listView = (ListView) rootView.findViewById(R.id.postListView);
+        listView.setAdapter(this.postListAdapter);
+        return rootView;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onPause() { super.onPause(); }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.posts = firebaseConnection.getPosts();
+        postListAdapter = new PostListAdapter(this.context, this.posts);
+        listView.setAdapter(postListAdapter);
     }
 
     @Override
@@ -90,6 +120,13 @@ public class NewsFeedFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onDestroy() { super.onDestroy(); }
+
+    public void setupFirebaseConnection(FirebaseConnection firebaseConnection) {
+        this.firebaseConnection = firebaseConnection;
+        this.posts = firebaseConnection.getPosts();
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
