@@ -3,6 +3,9 @@ package ivanc.swap;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -63,6 +66,10 @@ public class HomeActivity extends FragmentActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.gradientbar);
+        BitmapDrawable actionBarBackground = new BitmapDrawable(getResources(), bMap);
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(actionBarBackground);
     }
 //
 //    public void initializeFragments() {

@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -89,25 +93,26 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.drawer_home, container, false);
+        mDrawerListView = (ListView) inflater.inflate(R.layout.drawer_home, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+
+        List<NavigationDrawerItem> itemList = new ArrayList<>();
+        itemList.add(new NavigationDrawerItem("News Feed"));
+        itemList.add(new NavigationDrawerItem("Profile"));
+        itemList.add(new NavigationDrawerItem("New Post"));
+        itemList.add(new NavigationDrawerItem("Chat"));
+        itemList.add(new NavigationDrawerItem("About"));
+
+        mDrawerListView.setAdapter(new NavigationDrawerAdapter(
                 getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section_newsfeed),
-                        getString(R.string.title_section_profile),
-                        getString(R.string.title_section_newpost),
-                        getString(R.string.title_section_chat),
-                        getString(R.string.title_section_about),
-                }));
+                R.layout.drawer_item,
+                itemList));
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
