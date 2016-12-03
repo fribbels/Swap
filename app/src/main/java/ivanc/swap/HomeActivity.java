@@ -10,16 +10,12 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -49,13 +45,15 @@ public class HomeActivity extends FragmentActivity
 
     private FirebaseConnection firebaseConnection;
 
+    private Fragment currentFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        firebaseConnection = new FirebaseConnection(this);
         setContentView(R.layout.activity_home);
 //        initializeFragments();
 
-        firebaseConnection = new FirebaseConnection(this);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -84,18 +82,20 @@ public class HomeActivity extends FragmentActivity
         Fragment fragment = new Fragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
+        Fragment oldFragment = currentFragment;
         switch (position) {
             case 0:
                 fragment = new NewsFeedFragment(); //new NewsFeedFragment();
                 newsFeedFragment = (NewsFeedFragment)fragment;
+                newsFeedFragment.setupFirebaseConnection(firebaseConnection);
                 break;
             case 1:
                 fragment = new ProfileFragment(); //new ProfileFragment();
                 profileFragment = (ProfileFragment)fragment;
                 break;
             case 2:
-                fragment = new NewPostFragment(); //new NewPostFragment();
-                newPostFragment = (NewPostFragment)fragment;
+                fragment = new NewPostFragment();
+                newPostFragment = (NewPostFragment) fragment;
                 newPostFragment.setupFirebaseConnection(firebaseConnection);
                 break;
             case 3:
@@ -109,9 +109,16 @@ public class HomeActivity extends FragmentActivity
             default:
         }
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
+        currentFragment = fragment;
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.addToBackStack(null);
+        if (oldFragment != null)
+            ft.hide(oldFragment);
+        ft.add(R.id.container, fragment);
+        ft.commit();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.container, fragment)
+//                .commit();
     }
 
     public void onSectionAttached(int number) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,18 +104,14 @@ public class NewsFeedFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-    }
+    public void onPause() { super.onPause(); }
 
     @Override
-    public void onResume() { super.onResume(); }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    public void onResume() {
+        super.onResume();
+        this.posts = firebaseConnection.getPosts();
+        postListAdapter = new PostListAdapter(this.context, this.posts);
+        listView.setAdapter(postListAdapter);
     }
 
     @Override
@@ -123,6 +120,13 @@ public class NewsFeedFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onDestroy() { super.onDestroy(); }
+
+    public void setupFirebaseConnection(FirebaseConnection firebaseConnection) {
+        this.firebaseConnection = firebaseConnection;
+        this.posts = firebaseConnection.getPosts();
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
