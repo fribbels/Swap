@@ -2,7 +2,6 @@ package ivanc.swap;
 
 import android.app.Activity;
 
-import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,6 +13,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ import android.support.v4.widget.DrawerLayout;
 
 import java.util.List;
 
-public class HomeActivity extends FragmentActivity
+public class HomeActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
                    AboutFragment.OnFragmentInteractionListener,
                    NewsFeedFragment.OnFragmentInteractionListener,
@@ -68,7 +69,7 @@ public class HomeActivity extends FragmentActivity
 
         Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.gradientbar);
         BitmapDrawable actionBarBackground = new BitmapDrawable(getResources(), bMap);
-        ActionBar bar = getActionBar();
+        ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(actionBarBackground);
     }
 //
@@ -146,7 +147,7 @@ public class HomeActivity extends FragmentActivity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
