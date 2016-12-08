@@ -151,7 +151,10 @@ public class NewsFeedFragment extends Fragment {
 
             String title = post.get("title").getAsString();
             String desc = post.get("desc").getAsString();
-            tempList.add(new Post(title, desc));
+
+            Log.v("*************aaaaaaaa", post.get("image").getAsString());
+            String image = post.get("image").getAsString();
+            tempList.add(new Post(title, desc, image));
         }
 
         this.posts.clear();

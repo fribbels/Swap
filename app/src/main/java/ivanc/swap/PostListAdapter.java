@@ -1,11 +1,16 @@
 package ivanc.swap;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -58,15 +63,36 @@ public class PostListAdapter extends BaseAdapter {
         viewHolder.textViewPostText.setText(currentPost.getTitle());
         viewHolder.textViewPostDesc.setText(currentPost.getDescription());
 
+        Bitmap bitmap = getBitmapFromString(currentPost.getImage());
+        viewHolder.imageViewPostImage.setImageBitmap(bitmap);
         return convertView;
+    }
+
+
+    /*
+    * This Function converts the String back to Bitmap
+    * */
+    private Bitmap getBitmapFromString(String jsonString) {
+        Bitmap decodedByte;
+        try {
+            byte[] decodedString = Base64.decode(jsonString, Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        } catch (IllegalArgumentException e) {
+            Log.v("****** BAD JSON??? " , jsonString);
+            e.printStackTrace();
+            decodedByte = BitmapFactory.decodeByteArray(new byte[]{}, 0, 0);
+        }
+        return decodedByte;
     }
 
     private class ViewHolder {
         TextView textViewPostText;
         TextView textViewPostDesc;
+        ImageView imageViewPostImage;
         public ViewHolder(View view) {
             textViewPostText = (TextView) view.findViewById(R.id.post_title);
             textViewPostDesc = (TextView) view.findViewById(R.id.post_desc);
+            imageViewPostImage = (ImageView) view.findViewById(R.id.post_image);
         }
     }
 }
