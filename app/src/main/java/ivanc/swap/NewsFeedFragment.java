@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +112,7 @@ public class NewsFeedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.posts = firebaseConnection.getPosts();
+        this.posts = serverConnection.getPosts(this);
         postListAdapter = new PostListAdapter(this.context, this.posts);
         listView.setAdapter(postListAdapter);
     }
@@ -123,9 +126,37 @@ public class NewsFeedFragment extends Fragment {
     @Override
     public void onDestroy() { super.onDestroy(); }
 
-    public void setupFirebaseConnection(FirebaseConnection firebaseConnection) {
-        this.firebaseConnection = firebaseConnection;
-        this.posts = firebaseConnection.getPosts();
+    public void setupFirebaseConnection(ServerConnection serverConnection) {
+        this.serverConnection = serverConnection;
+        this.posts = serverConnection.getPosts(this);
+    }
+
+    private void refreshList() {
+        serverConnection.getPosts(this);
+        if (this.posts == null) {
+            this.posts = new ArrayList<>();
+        }
+        postListAdapter = new PostListAdapter(getContext(), this.posts);
+        listView.setAdapter(postListAdapter);
+    }
+
+    public void postsArrivedCallback (JsonObject json) {
+        Log.v("**********", "POSTS ARRIVED" + json.toString());
+
+        JsonArray posts = json.getAsJsonArray("posts");
+        List<Post> tempList = new ArrayList<>();
+
+        for (int i = 0; i < posts.size(); i++) {
+            JsonObject post = posts.get(i).getAsJsonObject();
+
+            String title = post.get("title").getAsString();
+            String desc = post.get("desc").getAsString();
+            tempList.add(new Post(title, desc));
+        }
+
+        this.posts.clear();
+        this.posts.addAll(tempList);
+        postListAdapter.notifyDataSetChanged();
     }
     /**
      * This interface must be implemented by activities that contain this

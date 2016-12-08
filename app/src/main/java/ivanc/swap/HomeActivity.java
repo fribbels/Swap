@@ -50,7 +50,11 @@ public class HomeActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         firebaseConnection = new FirebaseConnection(this);
+=======
+        serverConnection = new ServerConnection(this, getApplicationContext());
+>>>>>>> New-post-screen-improvements
         setContentView(R.layout.activity_home);
 //        initializeFragments();
 
@@ -116,9 +120,6 @@ public class HomeActivity extends FragmentActivity
             ft.hide(oldFragment);
         ft.add(R.id.container, fragment);
         ft.commit();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.container, fragment)
-//                .commit();
     }
 
     public void onSectionAttached(int number) {
