@@ -4,7 +4,7 @@
     tools:context="ivanc.swap.LoginPageActivity"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@drawable/gradient3"
+    android:background="@drawable/gradient"
     android:gravity="center"
     android:weightSum="2"
     android:layout_height="match_parent">
