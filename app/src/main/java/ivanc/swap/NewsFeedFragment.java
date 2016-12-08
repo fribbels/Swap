@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ public class NewsFeedFragment extends Fragment {
     private Context context;
     private ListView listView;
     private List<Post> posts;
-    private FirebaseConnection firebaseConnection;
+    private ServerConnection serverConnection;
 
     /**
      * Use this factory method to create a new instance of
@@ -109,7 +108,7 @@ public class NewsFeedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.posts = firebaseConnection.getPosts();
+        this.posts = serverConnection.getPosts();
         postListAdapter = new PostListAdapter(this.context, this.posts);
         listView.setAdapter(postListAdapter);
     }
@@ -123,9 +122,9 @@ public class NewsFeedFragment extends Fragment {
     @Override
     public void onDestroy() { super.onDestroy(); }
 
-    public void setupFirebaseConnection(FirebaseConnection firebaseConnection) {
-        this.firebaseConnection = firebaseConnection;
-        this.posts = firebaseConnection.getPosts();
+    public void setupFirebaseConnection(ServerConnection serverConnection) {
+        this.serverConnection = serverConnection;
+        this.posts = serverConnection.getPosts();
     }
     /**
      * This interface must be implemented by activities that contain this

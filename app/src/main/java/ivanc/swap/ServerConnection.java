@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
  * Created by ivanc on 12/1/2016.
  */
 
-public class FirebaseConnection extends AppCompatActivity {
+public class ServerConnection extends AppCompatActivity {
     private String mUsername;
     private Firebase ref; // experimental
     private FirebaseAuth mFirebaseAuth;
@@ -43,7 +43,7 @@ public class FirebaseConnection extends AppCompatActivity {
     private List<Post> localPosts;
 
 
-    public FirebaseConnection (HomeActivity activity) {
+    public ServerConnection(HomeActivity activity) {
         this.activity = activity;
         Firebase.setAndroidContext(activity);
         this.ref = new Firebase("https://swap-aa672.firebaseio.com/");

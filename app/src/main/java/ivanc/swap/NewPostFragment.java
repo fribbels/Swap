@@ -14,7 +14,10 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,10 +38,14 @@ public class NewPostFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private FirebaseConnection firebaseConnection;
+    private ServerConnection serverConnection;
 
-    private EditText newPostEditText;
+    private EditText newPostTitleEditText;
+    private EditText newPostDescEditText;
     private Button newPostSubmitButton;
+    private Button getImageButton;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     public NewPostFragment() {
         // Required empty public constructor
@@ -48,8 +55,6 @@ public class NewPostFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment NewPostFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -76,19 +81,33 @@ public class NewPostFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        newPostEditText = (EditText)getView().findViewById(R.id.new_post_text);
+        newPostTitleEditText = (EditText)getView().findViewById(R.id.new_post_title);
+        newPostDescEditText = (EditText)getView().findViewById(R.id.new_post_description);
         newPostSubmitButton = (Button)getView().findViewById(R.id.new_post_submit);
+        getImageButton = (Button)getView().findViewById(R.id.get_image_button);
 
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.hideSoftInputFromWindow(newPostEditText.getWindowToken(), 0);
+        mgr.hideSoftInputFromWindow(newPostTitleEditText.getWindowToken(), 0);
 
-        newPostEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+        newPostTitleEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(newPostEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                    in.hideSoftInputFromWindow(newPostTitleEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                return handled;
+            }
+        });
+
+        newPostDescEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(newPostTitleEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
                 }
                 return handled;
             }
@@ -96,17 +115,48 @@ public class NewPostFragment extends Fragment {
 
         newPostSubmitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String title = newPostEditText.getText().toString();
-                firebaseConnection.makePost(new Post(title));
+                String title = newPostTitleEditText.getText().toString();
+                String desc = newPostDescEditText.getText().toString();
+                serverConnection.makePost(new Post(title, desc));
                 Log.v("*********", "TIT:E" + title);
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(newPostEditText.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(newPostTitleEditText.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(newPostDescEditText.getWindowToken(), 0);
+            }
+        });
+
+        getImageButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
             }
         });
     }
 
-    public void setupFirebaseConnection(FirebaseConnection firebaseConnection) {
-        this.firebaseConnection = firebaseConnection;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        ImageView imageView = (ImageView)getView().findViewById(R.id.new_post_image);
+        switch(requestCode) {
+            case 0:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    imageView.setImageURI(selectedImage);
+                }
+
+                break;
+            case 1:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    imageView.setImageURI(selectedImage);
+                }
+                break;
+        }
+    }
+
+    public void setupFirebaseConnection(ServerConnection serverConnection) {
+        this.serverConnection = serverConnection;
     }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

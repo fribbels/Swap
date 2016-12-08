@@ -8,14 +8,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,14 +43,14 @@ public class HomeActivity extends ActionBarActivity
     private ProfileFragment profileFragment;
     private NewPostFragment newPostFragment;
 
-    private FirebaseConnection firebaseConnection;
+    private ServerConnection serverConnection;
 
     private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        firebaseConnection = new FirebaseConnection(this);
+        serverConnection = new ServerConnection(this);
         setContentView(R.layout.activity_home);
 //        initializeFragments();
 
@@ -95,7 +91,7 @@ public class HomeActivity extends ActionBarActivity
             case 0:
                 fragment = new NewsFeedFragment(); //new NewsFeedFragment();
                 newsFeedFragment = (NewsFeedFragment)fragment;
-                newsFeedFragment.setupFirebaseConnection(firebaseConnection);
+                newsFeedFragment.setupFirebaseConnection(serverConnection);
                 break;
             case 1:
                 fragment = new ProfileFragment(); //new ProfileFragment();
@@ -104,7 +100,7 @@ public class HomeActivity extends ActionBarActivity
             case 2:
                 fragment = new NewPostFragment();
                 newPostFragment = (NewPostFragment) fragment;
-                newPostFragment.setupFirebaseConnection(firebaseConnection);
+                newPostFragment.setupFirebaseConnection(serverConnection);
                 break;
             case 3:
                 fragment = new ChatFragment(); //new ChatFragment();
