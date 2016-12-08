@@ -1,8 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewPostFragment">
+    tools:context=".NewPostFragment"
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -11,15 +14,35 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/new_post_text"
+        android:id="@+id/new_post_title"
         tools:text="Title"
         android:imeOptions="actionDone" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="106dp"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/new_post_description"
+        android:hint="Description" />
+
     <Button
-        android:text="Button"
+        android:text="Image"
+        android:layout_width="108dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/get_image_button" />
+
+    <Button
+        android:text="Submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/new_post_submit"
         android:onClick="newPostSubmitClicked" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@color/activated_color"
+        android:id="@+id/new_post_image" />
 
 </LinearLayout>

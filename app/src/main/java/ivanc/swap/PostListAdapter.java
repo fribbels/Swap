@@ -56,14 +56,17 @@ public class PostListAdapter extends BaseAdapter {
 
         Post currentPost = getItem(position);
         viewHolder.textViewPostText.setText(currentPost.getTitle());
+        viewHolder.textViewPostDesc.setText(currentPost.getDescription());
 
         return convertView;
     }
 
     private class ViewHolder {
         TextView textViewPostText;
+        TextView textViewPostDesc;
         public ViewHolder(View view) {
             textViewPostText = (TextView) view.findViewById(R.id.post_title);
+            textViewPostDesc = (TextView) view.findViewById(R.id.post_desc);
         }
     }
 }

@@ -2,7 +2,6 @@ package ivanc.swap;
 
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +10,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +23,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -89,25 +94,26 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.drawer_home, container, false);
+        mDrawerListView = (ListView) inflater.inflate(R.layout.drawer_home, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section_newsfeed),
-                        getString(R.string.title_section_profile),
-                        getString(R.string.title_section_newpost),
-                        getString(R.string.title_section_chat),
-                        getString(R.string.title_section_about),
-                }));
+
+        List<NavigationDrawerItem> itemList = new ArrayList<>();
+        itemList.add(new NavigationDrawerItem("News Feed"));
+        itemList.add(new NavigationDrawerItem("Profile"));
+        itemList.add(new NavigationDrawerItem("New Post"));
+        itemList.add(new NavigationDrawerItem("Chat"));
+        itemList.add(new NavigationDrawerItem("About"));
+
+        mDrawerListView.setAdapter(new NavigationDrawerAdapter(
+                ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext(),
+                R.layout.drawer_item,
+                itemList));
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
@@ -130,7 +136,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
@@ -269,7 +275,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private ActionBar getActionBar() {
-        return getActivity().getActionBar();
+        return ((ActionBarActivity)getActivity()).getSupportActionBar();
     }
 
     /**
