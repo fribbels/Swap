@@ -1,6 +1,7 @@
 package ivanc.swap;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -23,118 +24,66 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 /**
  * Created by ivanc on 12/1/2016.
  */
 
 public class ServerConnection extends AppCompatActivity {
-    private String mUsername;
-    private Firebase ref; // experimental
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private HomeActivity activity;
-//
-    private DatabaseReference mFirebaseDatabaseReference;
-
-    public static final String MESSAGES_CHILD = "Posts";
 
     private List<Post> localPosts;
+    private Context context;
+    private NewsFeedFragment newsFeedFragment;
 
 
-    public ServerConnection(HomeActivity activity) {
+    public ServerConnection(HomeActivity activity, Context context) {
         this.activity = activity;
-        Firebase.setAndroidContext(activity);
-        this.ref = new Firebase("https://swap-aa672.firebaseio.com/");
-        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-            @Override
-            public void onAuthenticated(AuthData authData) {
-                // Authenticated successfully with payload authData
-            }
-            @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {
-                // Authenticated failed with error firebaseError
-            }
-        };
-        ref.authAnonymously(authResultHandler);
-        configureFirebase();
-    }
-
-    private void configureFirebase () {
+        this.context = context;
         localPosts = new ArrayList<>();
-
-//         Firebase authentication
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
-//                FirebaseUser user = firebaseAuth.getCurrentUser();
-            }
-        };
-
-        // Anonymous sign in
-        mFirebaseAuth.signInAnonymously()
-                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(Task<AuthResult> task) {
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w("*****************", "signInAnonymouslyFailed", task.getException());
-                        } else {
-                            Log.v("*****************", "DONE");
-                        }
-                    }
-                });
-
-        // Add message listener
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Posts");
-        mFirebaseDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                localPosts = new ArrayList<Post>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Map<String, String> data = (Map)snapshot.getValue();
-                    String text = data.get("title");
-
-                    Log.v("***********", "New post: " + data);
-
-                    Post post = new Post(text);
-                    localPosts.add(post);
-                }
-                activity.updatePosts(localPosts);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
     }
 
     public void makePost (Post post) {
-        String key = mFirebaseDatabaseReference.push().getKey();
-        mFirebaseDatabaseReference.child(key).setValue(post);
+        // Server
+        JsonObject json = new JsonObject();
+        json.addProperty("title", post.getTitle());
+        json.addProperty("desc", post.getDescription());
+
+        Ion.with(context)
+                .load("https://damp-tundra-41875.herokuapp.com/post")
+                .setHeader("Content-Type", "application/json")
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                    }
+                });
     }
 
-    public List<Post> getPosts () {
+    private void postReceivedListener(JsonObject json) {
+        newsFeedFragment.postsArrivedCallback(json);
+    }
+
+    public List<Post> getPosts (NewsFeedFragment newsFeedFragment) {
+        // Check if server available otherwise return local
+        this.newsFeedFragment = newsFeedFragment;
+        JsonObject json = new JsonObject();
+
+        Ion.with(context)
+                .load("https://damp-tundra-41875.herokuapp.com/get")
+                .setHeader("Content-Type", "application/json")
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        postReceivedListener(result);
+                    }
+                });
         return localPosts;
-    }
-
-    public void onMainStart() {
-//        if (mFirebaseAuth == null)
-//            mFirebaseAuth = FirebaseAuth.getInstance();
-//
-//        mFirebaseAuth.addAuthStateListener(mAuthListener);
-    }
-
-    public void onMainStop() {
-//        if (mAuthListener != null) {
-//            mFirebaseAuth.removeAuthStateListener(mAuthListener);
-//        }
     }
 }
