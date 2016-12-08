@@ -50,7 +50,7 @@ public class HomeActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        serverConnection = new ServerConnection(this);
+        serverConnection = new ServerConnection(this, getApplicationContext());
         setContentView(R.layout.activity_home);
 //        initializeFragments();
 
@@ -120,9 +120,6 @@ public class HomeActivity extends ActionBarActivity
             ft.hide(oldFragment);
         ft.add(R.id.container, fragment);
         ft.commit();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.container, fragment)
-//                .commit();
     }
 
     public void onSectionAttached(int number) {
