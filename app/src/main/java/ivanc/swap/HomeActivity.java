@@ -50,7 +50,10 @@ public class HomeActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set up APIs
         serverConnection = new ServerConnection(this, getApplicationContext());
+
         setContentView(R.layout.activity_home);
 //        initializeFragments();
 
@@ -91,24 +94,29 @@ public class HomeActivity extends ActionBarActivity
             case 0:
                 fragment = new NewsFeedFragment(); //new NewsFeedFragment();
                 newsFeedFragment = (NewsFeedFragment)fragment;
+                newsFeedFragment.initialize(this);
                 newsFeedFragment.setupFirebaseConnection(serverConnection);
                 break;
             case 1:
                 fragment = new ProfileFragment(); //new ProfileFragment();
                 profileFragment = (ProfileFragment)fragment;
+                profileFragment.initialize(this);
                 break;
             case 2:
                 fragment = new NewPostFragment();
                 newPostFragment = (NewPostFragment) fragment;
+                newPostFragment.initialize(this);
                 newPostFragment.setupFirebaseConnection(serverConnection);
                 break;
             case 3:
                 fragment = new ChatFragment(); //new ChatFragment();
                 chatFragment = (ChatFragment)fragment;
+                chatFragment.initialize(this);
                 break;
             case 4:
                 fragment = new AboutFragment();
                 aboutFragment = (AboutFragment)fragment;
+                aboutFragment.initialize(this);
                 break;
             default:
         }

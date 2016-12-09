@@ -18,7 +18,9 @@ android {
         }
     }
 }
-
+repositories {
+    maven { url "https://raw.githubusercontent.com/smilefam/SendBird-SDK-Android/master/" }
+}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -32,6 +34,7 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.vstechlab.easyfonts:easyfonts:1.0.0'
     compile 'com.koushikdutta.ion:ion:2.+'
+    compile 'com.sendbird.sdk:sendbird-android-sdk:3.0.10'
     testCompile 'junit:junit:4.12'
 }
 

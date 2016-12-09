@@ -32,12 +32,27 @@
         android:layout_height="wrap_content"
         android:id="@+id/get_image_button" />
 
-    <Button
-        android:text="Submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/new_post_submit"
-        android:onClick="newPostSubmitClicked" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:text="Submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_post_submit"
+            android:onClick="newPostSubmitClicked"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/test_button"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
     <ImageView
         android:layout_width="match_parent"

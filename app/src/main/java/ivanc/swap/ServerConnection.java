@@ -27,6 +27,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.sendbird.android.GroupChannel;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
+import android.provider.Settings.Secure;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by ivanc on 12/1/2016.
@@ -39,11 +46,53 @@ public class ServerConnection extends AppCompatActivity {
     private Context context;
     private NewsFeedFragment newsFeedFragment;
 
+    private String SENDBIRD_APP_ID = "6A2C5712-870F-4487-AB31-3EF97B040807";
+    private String android_id;
 
     public ServerConnection(HomeActivity activity, Context context) {
         this.activity = activity;
         this.context = context;
         localPosts = new ArrayList<>();
+        android_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+        initSendbird();
+    }
+
+    private void initSendbird() {
+        SendBird.init(SENDBIRD_APP_ID, context);
+        SendBird.connect(android_id, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+            if (e != null) {
+                // Error.
+                return;
+            }
+            SendBird.updateCurrentUserInfo("nickname", "profileurl", new SendBird.UserInfoUpdateHandler() {
+                @Override
+                public void onUpdated(SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                }
+            });
+            }
+        });
+    }
+
+    public void newChat(String otherid) {
+        List<String> userids = new ArrayList<>();
+        userids.add(otherid);
+        userids.add(getUserid());
+
+        GroupChannel.createChannelWithUserIds(userids, false, new GroupChannel.GroupChannelCreateHandler() {
+            @Override
+            public void onResult(GroupChannel groupChannel, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+            }
+        });
     }
 
     public void makePost (Post post) {
@@ -52,6 +101,7 @@ public class ServerConnection extends AppCompatActivity {
         json.addProperty("title", post.getTitle());
         json.addProperty("desc", post.getDescription());
         json.addProperty("image", post.getImage());
+        json.addProperty("userid", post.getUserid());
 
         Ion.with(context)
                 .load("https://damp-tundra-41875.herokuapp.com/post")
@@ -86,5 +136,9 @@ public class ServerConnection extends AppCompatActivity {
                     }
                 });
         return localPosts;
+    }
+
+    public String getUserid () {
+        return android_id;
     }
 }

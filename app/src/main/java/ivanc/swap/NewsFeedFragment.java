@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
@@ -42,7 +43,7 @@ public class NewsFeedFragment extends Fragment {
     private ListView listView;
     private List<Post> posts;
     private ServerConnection serverConnection;
-
+    private HomeActivity homeActivity;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -66,13 +67,6 @@ public class NewsFeedFragment extends Fragment {
         super.onAttach(context);
         this.context = context;
 
-
-        List<Post> posts = new ArrayList<>();
-        posts.add(new Post("Test"));
-        posts.add(new Post("Extra meatloaf!!!"));
-        posts.add(new Post("Offering 'backrub' ;) ;)"));
-        posts.add(new Post("Winter jacket4sale"));
-        posts.add(new Post("Will mow your lawn. All day long."));
 
 //        this.posts = posts;
     }
@@ -98,6 +92,17 @@ public class NewsFeedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_news_feed, container, false);
         listView = (ListView) rootView.findViewById(R.id.postListView);
         listView.setAdapter(this.postListAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                Log.v("***************** pos", "" + position);
+                Log.v("***************** ID", "" + posts.get(position).getUserid());
+
+                String otherid = posts.get(position).getUserid();
+                serverConnection.newChat(otherid);
+                homeActivity.onNavigationDrawerItemSelected(3);
+            }
+        });
         return rootView;
     }
 
@@ -115,6 +120,8 @@ public class NewsFeedFragment extends Fragment {
         this.posts = serverConnection.getPosts(this);
         postListAdapter = new PostListAdapter(this.context, this.posts);
         listView.setAdapter(postListAdapter);
+        listView.requestLayout();
+        postListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -131,17 +138,11 @@ public class NewsFeedFragment extends Fragment {
         this.posts = serverConnection.getPosts(this);
     }
 
-    private void refreshList() {
-        serverConnection.getPosts(this);
-        if (this.posts == null) {
-            this.posts = new ArrayList<>();
-        }
-        postListAdapter = new PostListAdapter(getContext(), this.posts);
-        listView.setAdapter(postListAdapter);
+    public void initialize (HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
     }
 
     public void postsArrivedCallback (JsonObject json) {
-        Log.v("**********", "POSTS ARRIVED" + json.toString());
 
         JsonArray posts = json.getAsJsonArray("posts");
         List<Post> tempList = new ArrayList<>();
@@ -151,10 +152,9 @@ public class NewsFeedFragment extends Fragment {
 
             String title = post.get("title").getAsString();
             String desc = post.get("desc").getAsString();
-
-            Log.v("*************aaaaaaaa", post.get("image").getAsString());
+            String userid = post.get("userid").getAsString();
             String image = post.get("image").getAsString();
-            tempList.add(new Post(title, desc, image));
+            tempList.add(new Post(title, desc, image, userid));
         }
 
         this.posts.clear();

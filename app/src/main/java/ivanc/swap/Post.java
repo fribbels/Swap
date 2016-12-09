@@ -10,14 +10,14 @@ public class Post {
     private String description;
     private double longitude;
     private double latitude;
-    private String id;
+    private String userid;
 
     public Post (String title) {
         this.title = title;
         this.description = "";
         this.longitude = 0;
         this.latitude = 0;
-        this.id = "Anonymous";
+        this.userid = "Anonymous";
         this.image = "";
     }
 
@@ -26,7 +26,7 @@ public class Post {
         this.description = description;
         this.longitude = 0;
         this.latitude = 0;
-        this.id = "Anonymous";
+        this.userid = "Anonymous";
         this.image = "";
     }
     public Post (String title, String description, String image) {
@@ -34,7 +34,15 @@ public class Post {
         this.description = description;
         this.longitude = 0;
         this.latitude = 0;
-        this.id = "Anonymous";
+        this.userid = "Anonymous";
+        this.image = image;
+    }
+    public Post (String title, String description, String image, String userid) {
+        this.title = title;
+        this.description = description;
+        this.longitude = 0;
+        this.latitude = 0;
+        this.userid = userid;
         this.image = image;
     }
 
@@ -46,13 +54,13 @@ public class Post {
     }
     public double getLongitude () { return this.longitude; }
     public double getLatitude () { return this.latitude; }
-    public String getId () { return this.id; }
+    public String getUserid () { return this.userid; }
     public String getImage () { return this.image; }
 
     public void setTitle (String title) { this.title = title; }
     public void setDescription (String description) { this.description = description; }
     public void setLongitude (double longitude) { this.longitude = longitude; }
     public void setLatitude (double latitude) { this.latitude = latitude; }
-    public void setId (String id) { this.id = id; }
+    public void setUserid (String userid) { this.userid = userid; }
     public void getImage (String image) { this.image = image; }
 }

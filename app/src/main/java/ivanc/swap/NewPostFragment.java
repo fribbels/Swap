@@ -51,10 +51,12 @@ public class NewPostFragment extends Fragment {
     private EditText newPostDescEditText;
     private Button newPostSubmitButton;
     private Button getImageButton;
+    private Button testButton;
 
     private String currentImage = "";
 
     static final int REQUEST_IMAGE_GALLERY = 1;
+    private HomeActivity homeActivity;
 
     public NewPostFragment() {
         // Required empty public constructor
@@ -94,6 +96,7 @@ public class NewPostFragment extends Fragment {
         newPostDescEditText = (EditText)getView().findViewById(R.id.new_post_description);
         newPostSubmitButton = (Button)getView().findViewById(R.id.new_post_submit);
         getImageButton = (Button)getView().findViewById(R.id.get_image_button);
+        testButton = (Button)getView().findViewById(R.id.test_button);
 
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(newPostTitleEditText.getWindowToken(), 0);
@@ -126,11 +129,12 @@ public class NewPostFragment extends Fragment {
             public void onClick(View v) {
                 String title = newPostTitleEditText.getText().toString();
                 String desc = newPostDescEditText.getText().toString();
-                serverConnection.makePost(new Post(title, desc, currentImage));
+                serverConnection.makePost(new Post(title, desc, currentImage, serverConnection.getUserid()));
                 Log.v("*********", "TIT:E" + title);
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(newPostTitleEditText.getWindowToken(), 0);
                 imm.hideSoftInputFromWindow(newPostDescEditText.getWindowToken(), 0);
+                homeActivity.onNavigationDrawerItemSelected(0);
             }
         });
 
@@ -141,6 +145,15 @@ public class NewPostFragment extends Fragment {
                 startActivityForResult(pickPhoto , REQUEST_IMAGE_GALLERY);//one can be replaced with any action code
             }
         });
+
+        testButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            }
+        });
+    }
+
+    public void initialize (HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
     }
 
     @Override
