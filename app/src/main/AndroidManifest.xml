@@ -27,6 +27,40 @@
             android:label="@string/title_activity_home"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/NavBarTest"/>
+
+        <activity
+            android:name=".SendBirdMessagingActivity"
+            android:label="SendBird"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            >
+        </activity>
+
+        <activity
+            android:name=".SendBirdMemberListActivity"
+            android:label="SendBird"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            >
+        </activity>
+
+        <activity
+            android:name=".SendBirdUserListActivity"
+            android:label="SendBird"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            >
+        </activity>
+
+        <activity
+            android:name=".SendBirdMessagingChannelListActivity"
+            android:label="SendBird"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            >
+        </activity>
+
+
     </application>
 
 </manifest>

@@ -1,8 +1,10 @@
 package ivanc.swap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +46,8 @@ public class NewsFeedFragment extends Fragment {
     private List<Post> posts;
     private ServerConnection serverConnection;
     private HomeActivity homeActivity;
+
+    private static final int REQUEST_SENDBIRD_MESSAGING_ACTIVITY = 200;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -98,9 +102,15 @@ public class NewsFeedFragment extends Fragment {
                 Log.v("***************** pos", "" + position);
                 Log.v("***************** ID", "" + posts.get(position).getUserid());
 
-                String otherid = posts.get(position).getUserid();
-                serverConnection.newChat(otherid);
-                homeActivity.onNavigationDrawerItemSelected(3);
+                String otherId = posts.get(position).getUserid();
+                String appId = "6A2C5712-870F-4487-AB31-3EF97B040807";
+                String userId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+                Intent intent = new Intent(homeActivity, SendBirdMessagingActivity.class);
+                Bundle args = SendBirdMessagingActivity.makeMessagingStartArgs(appId, userId, userId, new String[]{otherId});
+                intent.putExtras(args);
+
+                startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
             }
         });
         return rootView;

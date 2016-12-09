@@ -2,10 +2,12 @@ package ivanc.swap;
 
 import android.app.Activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -109,9 +111,20 @@ public class HomeActivity extends ActionBarActivity
                 newPostFragment.setupFirebaseConnection(serverConnection);
                 break;
             case 3:
-                fragment = new ChatFragment(); //new ChatFragment();
-                chatFragment = (ChatFragment)fragment;
-                chatFragment.initialize(this);
+//                fragment = new ChatFragment(); //new ChatFragment();
+//                chatFragment = (ChatFragment)fragment;
+//                chatFragment.initialize(this);
+
+                final String appId = "6A2C5712-870F-4487-AB31-3EF97B040807"; /* Sample SendBird Application */
+                String userId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                String userName = "User-" + userId.substring(0, 5); /* Generate User Nickname */
+                int REQUEST_SENDBIRD_MESSAGING_CHANNEL_LIST_ACTIVITY = 201;
+
+                Intent intent = new Intent(this, SendBirdMessagingChannelListActivity.class);
+                Bundle args = SendBirdMessagingChannelListActivity.makeSendBirdArgs(appId, userId, userName);
+                intent.putExtras(args);
+
+                startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_CHANNEL_LIST_ACTIVITY);
                 break;
             case 4:
                 fragment = new AboutFragment();
