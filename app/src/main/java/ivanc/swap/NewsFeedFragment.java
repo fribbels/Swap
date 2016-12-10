@@ -1,12 +1,16 @@
 package ivanc.swap;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,21 +100,45 @@ public class NewsFeedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_news_feed, container, false);
         listView = (ListView) rootView.findViewById(R.id.postListView);
         listView.setAdapter(this.postListAdapter);
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+//                Log.v("***************** pos", "" + position);
+//                Log.v("***************** ID", "" + posts.get(position).getUserid());
+//
+//                String otherId = posts.get(position).getUserid();
+//                String appId = "6A2C5712-870F-4487-AB31-3EF97B040807";
+//                String userId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+//
+//                Intent intent = new Intent(homeActivity, SendBirdMessagingActivity.class);
+//                Bundle args = SendBirdMessagingActivity.makeMessagingStartArgs(appId, userId, userId, new String[]{otherId});
+//                intent.putExtras(args);
+//
+//                startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
+//            }
+//        });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                Log.v("***************** pos", "" + position);
-                Log.v("***************** ID", "" + posts.get(position).getUserid());
+//
+                AlertDialog.Builder helpBuilder = new AlertDialog.Builder(context);
+                helpBuilder.setPositiveButton("Ok",
+                        new DialogInterface.OnClickListener() {
 
-                String otherId = posts.get(position).getUserid();
-                String appId = "6A2C5712-870F-4487-AB31-3EF97B040807";
-                String userId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing but close the dialog
+                            }
+                        });
+                Display display = homeActivity.getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int width = size.x;
+                int height = size.y;
 
-                Intent intent = new Intent(homeActivity, SendBirdMessagingActivity.class);
-                Bundle args = SendBirdMessagingActivity.makeMessagingStartArgs(appId, userId, userId, new String[]{otherId});
-                intent.putExtras(args);
-
-                startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
+                // Remember, create doesn't show the dialog
+                ViewDialog alert = new ViewDialog();
+                alert.showDialog(getActivity(), posts.get(position));
+                //alert.getWindow().setLayout((int)(width-width*0.05), (int)(height-height*0.05));
             }
         });
         return rootView;
@@ -164,7 +192,8 @@ public class NewsFeedFragment extends Fragment {
             String desc = post.get("desc").getAsString();
             String userid = post.get("userid").getAsString();
             String image = post.get("image").getAsString();
-            tempList.add(new Post(title, desc, image, userid));
+            String username = post.get("username").getAsString();
+            tempList.add(new Post(title, desc, image, userid, username));
         }
 
         this.posts.clear();

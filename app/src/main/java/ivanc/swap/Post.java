@@ -11,6 +11,7 @@ public class Post {
     private double longitude;
     private double latitude;
     private String userid;
+    private String username;
 
     public Post (String title) {
         this.title = title;
@@ -19,24 +20,9 @@ public class Post {
         this.latitude = 0;
         this.userid = "Anonymous";
         this.image = "";
+        this.username = "";
     }
 
-    public Post (String title, String description) {
-        this.title = title;
-        this.description = description;
-        this.longitude = 0;
-        this.latitude = 0;
-        this.userid = "Anonymous";
-        this.image = "";
-    }
-    public Post (String title, String description, String image) {
-        this.title = title;
-        this.description = description;
-        this.longitude = 0;
-        this.latitude = 0;
-        this.userid = "Anonymous";
-        this.image = image;
-    }
     public Post (String title, String description, String image, String userid) {
         this.title = title;
         this.description = description;
@@ -44,6 +30,15 @@ public class Post {
         this.latitude = 0;
         this.userid = userid;
         this.image = image;
+    }
+    public Post (String title, String description, String image, String userid, String username) {
+        this.title = title;
+        this.description = description;
+        this.longitude = 0;
+        this.latitude = 0;
+        this.userid = userid;
+        this.image = image;
+        this.username = username;
     }
 
     public String getTitle () {
@@ -56,6 +51,7 @@ public class Post {
     public double getLatitude () { return this.latitude; }
     public String getUserid () { return this.userid; }
     public String getImage () { return this.image; }
+    public String getUsername () { return this.username; }
 
     public void setTitle (String title) { this.title = title; }
     public void setDescription (String description) { this.description = description; }
@@ -63,4 +59,5 @@ public class Post {
     public void setLatitude (double latitude) { this.latitude = latitude; }
     public void setUserid (String userid) { this.userid = userid; }
     public void getImage (String image) { this.image = image; }
+    public void setUsername (String image) { this.username = username; }
 }

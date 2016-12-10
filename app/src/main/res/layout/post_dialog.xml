@@ -1,0 +1,79 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/blurpurple"
+    android:weightSum="1">
+
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_username"
+        android:textSize="20sp" />
+
+    <ivanc.swap.MLRoundedImageView
+        android:id="@+id/dialog_image"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="250dp"
+        android:layout_height="250dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_title"
+        android:layout_weight="0.09" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_desc"
+        android:layout_weight="0.72" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.09" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Space
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_width="20dp" />
+
+        <Button
+            android:text="Back"
+            android:background="@drawable/rounded_button"
+            android:id="@+id/dialog_back_button"
+            android:layout_height="40dp"
+            android:onClick="getStartedClicked"
+            android:layout_weight="1"
+            android:layout_width="140dp" />
+
+        <Space
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="start a chat"
+            android:background="@drawable/rounded_button"
+            android:id="@+id/dialog_chat_button"
+            android:layout_height="40dp"
+            android:onClick="getStartedClicked"
+            android:layout_width="140dp" />
+
+        <Space
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_width="20dp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -100,6 +100,7 @@ public class ServerConnection extends AppCompatActivity {
         json.addProperty("desc", post.getDescription());
         json.addProperty("image", post.getImage());
         json.addProperty("userid", post.getUserid());
+        json.addProperty("username", post.getUsername());
 
         Ion.with(context)
                 .load("https://damp-tundra-41875.herokuapp.com/post")

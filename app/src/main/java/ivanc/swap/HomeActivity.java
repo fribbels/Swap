@@ -49,9 +49,14 @@ public class HomeActivity extends ActionBarActivity
 
     private Fragment currentFragment;
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle b = getIntent().getExtras();
+        username = b.getString("username");
 
         // Set up APIs
         serverConnection = new ServerConnection(this, getApplicationContext());
@@ -85,6 +90,9 @@ public class HomeActivity extends ActionBarActivity
         newsFeedFragment.updatePosts(posts);
     }
 
+    public String getUsername() {
+        return username;
+    }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments

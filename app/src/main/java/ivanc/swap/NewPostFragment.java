@@ -129,7 +129,7 @@ public class NewPostFragment extends Fragment {
             public void onClick(View v) {
                 String title = newPostTitleEditText.getText().toString();
                 String desc = newPostDescEditText.getText().toString();
-                serverConnection.makePost(new Post(title, desc, currentImage, serverConnection.getUserid()));
+                serverConnection.makePost(new Post(title, desc, currentImage, serverConnection.getUserid(), homeActivity.getUsername()));
                 Log.v("*********", "TIT:E" + title);
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(newPostTitleEditText.getWindowToken(), 0);
@@ -166,30 +166,12 @@ public class NewPostFragment extends Fragment {
                     Uri selectedImage = imageReturnedIntent.getData();
                     imageView.setImageURI(selectedImage);
 
-                    currentImage = getStringFromImageView(imageView);
+                    currentImage = ImageStringConverter.getStringFromImageView(imageView);
                 }
                 break;
         }
     }
 
-    private String getStringFromImageView(ImageView imageView) {
-     /*
-     * This functions converts Bitmap picture to a string which can be
-     * JSONified.
-     * */
-        final int COMPRESSION_QUALITY = 100;
-        String encodedImage;
-        ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
-
-        Drawable drawable = imageView.getDrawable();
-        BitmapDrawable bitmapDrawable = ((BitmapDrawable) drawable);
-        Bitmap bitmapPicture = bitmapDrawable.getBitmap();
-        bitmapPicture.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY,
-                byteArrayBitmapStream);
-        byte[] b = byteArrayBitmapStream.toByteArray();
-        encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-        return encodedImage;
-    }
 
     public void setupFirebaseConnection(ServerConnection serverConnection) {
         this.serverConnection = serverConnection;

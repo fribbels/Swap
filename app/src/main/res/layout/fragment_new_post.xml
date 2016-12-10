@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".NewPostFragment"
     android:orientation="vertical"
+    android:background="@drawable/blurback3"
     android:weightSum="1">
 
     <!-- TODO: Update blank fragment layout -->
@@ -55,9 +56,10 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="298dp"
+        android:layout_height="205dp"
         app:srcCompat="@color/activated_color"
+        android:layout_gravity="center"
         android:id="@+id/new_post_image" />
 
 </LinearLayout>

@@ -63,27 +63,14 @@ public class PostListAdapter extends BaseAdapter {
         viewHolder.textViewPostText.setText(currentPost.getTitle());
         viewHolder.textViewPostDesc.setText(currentPost.getDescription());
 
-        Bitmap bitmap = getBitmapFromString(currentPost.getImage());
+        Bitmap bitmap = ImageStringConverter.getBitmapFromString(currentPost.getImage());
         viewHolder.imageViewPostImage.setImageBitmap(bitmap);
         return convertView;
     }
 
-
     /*
     * This Function converts the String back to Bitmap
     * */
-    private Bitmap getBitmapFromString(String jsonString) {
-        Bitmap decodedByte;
-        try {
-            byte[] decodedString = Base64.decode(jsonString, Base64.DEFAULT);
-            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        } catch (IllegalArgumentException e) {
-            Log.v("****** BAD JSON??? " , jsonString);
-            e.printStackTrace();
-            decodedByte = BitmapFactory.decodeByteArray(new byte[]{}, 0, 0);
-        }
-        return decodedByte;
-    }
 
     private class ViewHolder {
         TextView textViewPostText;
