@@ -12,6 +12,7 @@ public class Post {
     private double latitude;
     private String userid;
     private String username;
+    private String timestamp;
 
     public Post (String title) {
         this.title = title;
@@ -40,6 +41,16 @@ public class Post {
         this.image = image;
         this.username = username;
     }
+    public Post (String title, String description, String image, String userid, String username, String timestamp) {
+        this.title = title;
+        this.description = description;
+        this.longitude = 0;
+        this.latitude = 0;
+        this.userid = userid;
+        this.image = image;
+        this.username = username;
+        this.timestamp = timestamp;
+    }
 
     public String getTitle () {
         return this.title;
@@ -52,6 +63,7 @@ public class Post {
     public String getUserid () { return this.userid; }
     public String getImage () { return this.image; }
     public String getUsername () { return this.username; }
+    public String getTimestamp() { return this.timestamp; }
 
     public void setTitle (String title) { this.title = title; }
     public void setDescription (String description) { this.description = description; }
@@ -60,4 +72,5 @@ public class Post {
     public void setUserid (String userid) { this.userid = userid; }
     public void getImage (String image) { this.image = image; }
     public void setUsername (String image) { this.username = username; }
+    public void setTimestamp (String timestamp) { this.timestamp = timestamp; }
 }

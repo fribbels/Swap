@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -101,7 +103,9 @@ public class ServerConnection extends AppCompatActivity {
         json.addProperty("image", post.getImage());
         json.addProperty("userid", post.getUserid());
         json.addProperty("username", post.getUsername());
+        json.addProperty("timestamp", post.getTimestamp());
 
+        Log.v("************make", json.get("timestamp").getAsString());
         Ion.with(context)
                 .load("https://damp-tundra-41875.herokuapp.com/post")
                 .setHeader("Content-Type", "application/json")

@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -129,7 +131,10 @@ public class NewPostFragment extends Fragment {
             public void onClick(View v) {
                 String title = newPostTitleEditText.getText().toString();
                 String desc = newPostDescEditText.getText().toString();
-                serverConnection.makePost(new Post(title, desc, currentImage, serverConnection.getUserid(), homeActivity.getUsername()));
+
+                String timestamp = DateUtils.getTimestamp();
+
+                serverConnection.makePost(new Post(title, desc, currentImage, serverConnection.getUserid(), homeActivity.getUsername(), timestamp));
                 Log.v("*********", "TIT:E" + title);
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(newPostTitleEditText.getWindowToken(), 0);

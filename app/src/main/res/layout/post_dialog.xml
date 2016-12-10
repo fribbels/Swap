@@ -9,9 +9,10 @@
     <TextView
         android:text="TextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/dialog_username"
-        android:textSize="20sp" />
+        android:textSize="25sp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center" />
 
     <ivanc.swap.MLRoundedImageView
         android:id="@+id/dialog_image"
@@ -23,14 +24,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialog_title"
-        android:layout_weight="0.09" />
+        android:layout_weight="0.09"
+        android:textAlignment="center"
+        android:text="Title"
+        android:textSize="35sp" />
 
     <TextView
         android:text="TextView"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/dialog_desc"
-        android:layout_weight="0.72" />
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.72"
+        android:textSize="20sp" />
 
     <Space
         android:layout_width="match_parent"

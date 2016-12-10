@@ -4,62 +4,139 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NewPostFragment"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@drawable/blurback3"
     android:weightSum="1">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/new_post_title"
-        tools:text="Title"
-        android:imeOptions="actionDone" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="106dp"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/new_post_description"
-        android:hint="Description" />
-
-    <Button
-        android:text="Image"
-        android:layout_width="108dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/get_image_button" />
+    <Space android:layout_height="match_parent"
+        android:layout_width="15dp" />
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="vertical"
+        android:layout_width="354dp"
+        android:layout_height="match_parent">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:text="What would you like to swap?"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textSize="16sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/new_post_title"
+            android:background="@drawable/greyalpha"
+            tools:text="Title"
+            android:imeOptions="actionDone"
+            android:hint="Title" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:text="More details!"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/new_post_description"
+            android:background="@drawable/greyalpha"
+            android:hint="Description" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <Button
-            android:text="Submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/new_post_submit"
-            android:onClick="newPostSubmitClicked"
-            android:layout_weight="1" />
+            android:text="Choose image"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:background="@drawable/rounded_button"
+            android:id="@+id/get_image_button"
+            android:elevation="0dp" />
 
-        <Button
-            android:text="Test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/test_button"
-            android:layout_weight="1" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <ImageView
+            android:layout_width="290dp"
+            android:layout_height="241dp"
+            android:layout_gravity="center"
+            android:background="@drawable/transp"
+            android:id="@+id/new_post_image" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Space
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="10dp" />
+
+            <Button
+                android:text="Submit"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:id="@+id/new_post_submit"
+                android:onClick="newPostSubmitClicked"
+                android:background="@drawable/rounded_button"
+                android:layout_weight="1" />
+
+            <Space
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_width="10dp" />
+
+            <Button
+                android:text="Test"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:id="@+id/test_button"
+                android:background="@drawable/rounded_button"
+                android:layout_weight="1" />
+
+            <Space
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="10dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="298dp"
-        android:layout_height="205dp"
-        app:srcCompat="@color/activated_color"
-        android:layout_gravity="center"
-        android:id="@+id/new_post_image" />
+    <Space android:layout_height="match_parent"
+        android:layout_width="15dp"
+        android:layout_gravity="right" />
 
 </LinearLayout>

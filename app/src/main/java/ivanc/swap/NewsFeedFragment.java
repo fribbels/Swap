@@ -193,7 +193,8 @@ public class NewsFeedFragment extends Fragment {
             String userid = post.get("userid").getAsString();
             String image = post.get("image").getAsString();
             String username = post.get("username").getAsString();
-            tempList.add(new Post(title, desc, image, userid, username));
+            String timestamp = post.get("timestamp").getAsString();
+            tempList.add(new Post(title, desc, image, userid, username, timestamp));
         }
 
         this.posts.clear();
