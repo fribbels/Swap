@@ -22,6 +22,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,6 +49,7 @@ public class NewsFeedFragment extends Fragment {
     private Context context;
     private ListView listView;
     private List<Post> posts;
+    private List<Post> adapterPosts;
     private ServerConnection serverConnection;
     private HomeActivity homeActivity;
 
@@ -74,49 +76,24 @@ public class NewsFeedFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-
-
-//        this.posts = posts;
     }
 
-    public void updatePosts(List<Post> posts) {
-        this.posts.clear();
-        this.posts.addAll(posts);
-
-        listView.setAdapter(new PostListAdapter(this.context, this.posts));
-        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged(); // Uh?
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        posts = new ArrayList<>();
-        postListAdapter = new PostListAdapter(this.context, this.posts);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_news_feed, container, false);
+
+        posts = new ArrayList<>();
+        adapterPosts = new ArrayList<>();
+
+        postListAdapter = new PostListAdapter(this.context, adapterPosts);
         listView = (ListView) rootView.findViewById(R.id.postListView);
-        listView.setAdapter(this.postListAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-//                Log.v("***************** pos", "" + position);
-//                Log.v("***************** ID", "" + posts.get(position).getUserid());
-//
-//                String otherId = posts.get(position).getUserid();
-//                String appId = "6A2C5712-870F-4487-AB31-3EF97B040807";
-//                String userId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-//
-//                Intent intent = new Intent(homeActivity, SendBirdMessagingActivity.class);
-//                Bundle args = SendBirdMessagingActivity.makeMessagingStartArgs(appId, userId, userId, new String[]{otherId});
-//                intent.putExtras(args);
-//
-//                startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_ACTIVITY);
-//            }
-//        });
+        listView.setAdapter(postListAdapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
@@ -124,7 +101,6 @@ public class NewsFeedFragment extends Fragment {
                 AlertDialog.Builder helpBuilder = new AlertDialog.Builder(context);
                 helpBuilder.setPositiveButton("Ok",
                         new DialogInterface.OnClickListener() {
-
                             public void onClick(DialogInterface dialog, int which) {
                                 // Do nothing but close the dialog
                             }
@@ -132,15 +108,14 @@ public class NewsFeedFragment extends Fragment {
                 Display display = homeActivity.getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
-                int width = size.x;
-                int height = size.y;
 
                 // Remember, create doesn't show the dialog
                 ViewDialog alert = new ViewDialog();
                 alert.showDialog(getActivity(), posts.get(position));
-                //alert.getWindow().setLayout((int)(width-width*0.05), (int)(height-height*0.05));
             }
         });
+        refreshList();
+        listView.requestLayout();
         return rootView;
     }
 
@@ -156,10 +131,15 @@ public class NewsFeedFragment extends Fragment {
     public void onResume() {
         super.onResume();
         this.posts = serverConnection.getPosts(this);
-        postListAdapter = new PostListAdapter(this.context, this.posts);
-        listView.setAdapter(postListAdapter);
-        listView.requestLayout();
+        refreshList();
+    }
+
+    private void refreshList() {
+        adapterPosts.clear();
+        Collections.reverse(posts);
+        adapterPosts.addAll(posts);
         postListAdapter.notifyDataSetChanged();
+        listView.invalidateViews();
     }
 
     @Override
@@ -181,7 +161,8 @@ public class NewsFeedFragment extends Fragment {
     }
 
     public void postsArrivedCallback (JsonObject json) {
-
+        if (json == null)
+            return;
         JsonArray posts = json.getAsJsonArray("posts");
         List<Post> tempList = new ArrayList<>();
 
@@ -197,9 +178,8 @@ public class NewsFeedFragment extends Fragment {
             tempList.add(new Post(title, desc, image, userid, username, timestamp));
         }
 
-        this.posts.clear();
-        this.posts.addAll(tempList);
-        postListAdapter.notifyDataSetChanged();
+        this.posts = tempList;
+        refreshList();
     }
     /**
      * 

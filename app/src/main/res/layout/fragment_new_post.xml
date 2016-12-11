@@ -10,12 +10,9 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <Space android:layout_height="match_parent"
-        android:layout_width="15dp" />
-
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="354dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <Space
@@ -24,20 +21,23 @@
 
         <TextView
             android:text="What would you like to swap?"
-            android:layout_width="match_parent"
+            android:layout_width="342dp"
             android:layout_height="wrap_content"
             android:id="@+id/textView"
-            android:textSize="16sp" />
+            android:layout_gravity="center_horizontal"
+            android:textSize="16sp"
+            android:gravity="start" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="339dp"
             android:layout_height="30dp"
             android:inputType="textPersonName"
             android:ems="10"
+            android:layout_gravity="center_horizontal"
             android:id="@+id/new_post_title"
             android:background="@drawable/greyalpha"
             tools:text="Title"
@@ -50,20 +50,25 @@
 
         <TextView
             android:text="More details!"
-            android:layout_width="match_parent"
+            android:layout_width="342dp"
             android:layout_height="wrap_content"
-            android:id="@+id/textView2" />
+            android:id="@+id/textView2"
+            android:layout_gravity="center_horizontal"
+            android:textSize="16sp"
+            android:gravity="start" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="342dp"
             android:layout_height="70dp"
-            android:inputType="textMultiLine"
+            android:inputType="text"
             android:ems="10"
+            android:layout_gravity="center_horizontal"
             android:id="@+id/new_post_description"
+            android:imeOptions="actionDone"
             android:background="@drawable/greyalpha"
             android:hint="Description" />
 
@@ -73,21 +78,23 @@
 
         <Button
             android:text="Choose image"
-            android:layout_width="match_parent"
             android:layout_height="25dp"
             android:background="@drawable/rounded_button"
+            android:layout_gravity="center"
             android:id="@+id/get_image_button"
-            android:elevation="0dp" />
+            android:elevation="0dp"
+            android:layout_width="240dp" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
         <ImageView
-            android:layout_width="290dp"
-            android:layout_height="241dp"
+            android:layout_width="264dp"
+            android:layout_height="211dp"
             android:layout_gravity="center"
             android:background="@drawable/transp"
+            android:src="@drawable/placeholder"
             android:id="@+id/new_post_image" />
 
         <Space
@@ -106,25 +113,11 @@
 
             <Button
                 android:text="Submit"
-                android:layout_width="wrap_content"
+                android:layout_width="237dp"
                 android:layout_height="25dp"
                 android:id="@+id/new_post_submit"
                 android:onClick="newPostSubmitClicked"
-                android:background="@drawable/rounded_button"
-                android:layout_weight="1" />
-
-            <Space
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_width="10dp" />
-
-            <Button
-                android:text="Test"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:id="@+id/test_button"
-                android:background="@drawable/rounded_button"
-                android:layout_weight="1" />
+                android:background="@drawable/rounded_button" />
 
             <Space
                 android:layout_height="wrap_content"
@@ -134,9 +127,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <Space android:layout_height="match_parent"
-        android:layout_width="15dp"
-        android:layout_gravity="right" />
 
 </LinearLayout>

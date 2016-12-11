@@ -62,7 +62,7 @@ public class PostListAdapter extends BaseAdapter {
 
         Post currentPost = getItem(position);
         viewHolder.textViewPostText.setText(currentPost.getTitle());
-        viewHolder.textViewPostDesc.setText(currentPost.getDescription());
+//        viewHolder.textViewPostDesc.setText(currentPost.getDescription());
         viewHolder.textViewPostTimestamp.setText(DateUtils.convertISO8601ToTimeAgo(currentPost.getTimestamp()));
         Bitmap bitmap = ImageStringConverter.getBitmapFromString(currentPost.getImage());
         viewHolder.imageViewPostImage.setImageBitmap(bitmap);
@@ -75,12 +75,12 @@ public class PostListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         TextView textViewPostText;
-        TextView textViewPostDesc;
+//        TextView textViewPostDesc;
         TextView textViewPostTimestamp;
         ImageView imageViewPostImage;
         public ViewHolder(View view) {
             textViewPostText = (TextView) view.findViewById(R.id.post_title);
-            textViewPostDesc = (TextView) view.findViewById(R.id.post_desc);
+//            textViewPostDesc = (TextView) view.findViewById(R.id.post_desc);
             textViewPostTimestamp = (TextView) view.findViewById(R.id.post_timestamp);
             imageViewPostImage = (ImageView) view.findViewById(R.id.post_image);
         }

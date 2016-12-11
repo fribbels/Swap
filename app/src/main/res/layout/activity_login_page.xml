@@ -58,6 +58,10 @@
             android:textSize="22sp"
             android:textColor="#a6e8d2"/>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
         <EditText
             android:layout_width="293dp"
             android:layout_height="40dp"
@@ -65,6 +69,7 @@
             android:ems="10"
             android:id="@+id/login_username"
             android:background="@drawable/grey_input_box"
+            android:imeOptions="actionDone"
             android:textAlignment="center"
             android:hint="Username" />
 

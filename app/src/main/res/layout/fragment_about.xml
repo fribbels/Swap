@@ -1,14 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/blurback3"
-    tools:context=".AboutFragment">
+    tools:context=".AboutFragment"
+    android:weightSum="1"
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="about" />
 
-</FrameLayout>
+    <TextView
+        android:text="Hi! This is my final project for Comp 86. Thanks for trying it out!"
+        android:layout_width="292dp"
+        android:layout_height="417dp"
+        android:id="@+id/textView3"
+        android:textSize="18sp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="viewStart" />
+</RelativeLayout>

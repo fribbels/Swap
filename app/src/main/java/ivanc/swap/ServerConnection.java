@@ -97,7 +97,7 @@ public class ServerConnection extends AppCompatActivity {
 
     public void makePost (Post post) {
         // Server
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
         json.addProperty("title", post.getTitle());
         json.addProperty("desc", post.getDescription());
         json.addProperty("image", post.getImage());
@@ -106,16 +106,22 @@ public class ServerConnection extends AppCompatActivity {
         json.addProperty("timestamp", post.getTimestamp());
 
         Log.v("************make", json.get("timestamp").getAsString());
-        Ion.with(context)
-                .load("https://damp-tundra-41875.herokuapp.com/post")
-                .setHeader("Content-Type", "application/json")
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                    }
-                });
+        new Thread() {
+            public void run() {
+                Ion.with(context)
+                        .load("https://infinite-stream-97401.herokuapp.com/post")
+                        .setHeader("Content-Type", "application/json")
+                        .setJsonObjectBody(json)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                            }
+                        });
+            }
+        }.start();
+
+
     }
 
     private void postReceivedListener(JsonObject json) {
@@ -125,19 +131,24 @@ public class ServerConnection extends AppCompatActivity {
     public List<Post> getPosts (NewsFeedFragment newsFeedFragment) {
         // Check if server available otherwise return local
         this.newsFeedFragment = newsFeedFragment;
-        JsonObject json = new JsonObject();
+        final JsonObject json = new JsonObject();
 
-        Ion.with(context)
-                .load("https://damp-tundra-41875.herokuapp.com/get")
-                .setHeader("Content-Type", "application/json")
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        postReceivedListener(result);
-                    }
-                });
+        new Thread() {
+            public void run() {
+                Ion.with(context)
+                        .load("https://infinite-stream-97401.herokuapp.com/get")
+                        .setHeader("Content-Type", "application/json")
+                        .setJsonObjectBody(json)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                postReceivedListener(result);
+                            }
+                        });
+            }
+        }.start();
+
         return localPosts;
     }
 

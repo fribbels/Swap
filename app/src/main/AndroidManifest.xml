@@ -9,7 +9,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo2"
         android:label="@string/app_name"
         android:theme="@style/NavBarTest"
         android:supportsRtl="true">
@@ -60,7 +60,10 @@
             >
         </activity>
 
-
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="97053a06e09c5adf94f1cab5b63fa61df1bde4c2"
+            />
     </application>
 
 </manifest>

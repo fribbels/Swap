@@ -26,7 +26,9 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="207dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:layout_weight="0.93">
 
             <Space
                 android:layout_width="match_parent"
@@ -37,25 +39,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_title"
-                android:textSize="24sp"
-                android:textColor="@android:color/background_light" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
-            <TextView
-                android:text="TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/post_desc"
-                android:layout_weight="0.51"
+                android:textSize="20sp"
                 android:textColor="@android:color/background_light"
-                android:textSize="18sp" />
+                android:layout_weight="0.67" />
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="10dp"
+                android:layout_weight="0.30" />
 
             <TextView
                 android:text="TextView"
@@ -66,9 +57,9 @@
         </LinearLayout>
 
         <Space
-            android:layout_width="20dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="0.46"
+            android:layout_width="10dp" />
 
     </LinearLayout>
 

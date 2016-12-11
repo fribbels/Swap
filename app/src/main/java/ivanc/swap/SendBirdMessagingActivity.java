@@ -118,6 +118,7 @@ public class SendBirdMessagingActivity extends FragmentActivity {
     private View mSettingsContainer;
     private MessagingChannel mMessagingChannel;
     private Bundle mSendBirdInfo;
+    private HomeActivity homeActivity;
 
 
     private boolean isUploading;
@@ -159,6 +160,10 @@ public class SendBirdMessagingActivity extends FragmentActivity {
         initUIComponents();
         initSendBird(getIntent().getExtras());
 
+    }
+
+    public void setHomeActivity(HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
     }
 
     @Override

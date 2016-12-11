@@ -19,6 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
+
 import java.util.List;
 
 public class HomeActivity extends ActionBarActivity
@@ -55,6 +58,8 @@ public class HomeActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Fabric.with(this, new Crashlytics());
+        setTitle("Swap");
         Bundle b = getIntent().getExtras();
         username = b.getString("username");
 
@@ -73,26 +78,20 @@ public class HomeActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.gradientbar);
+        Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.bluetop2);
         BitmapDrawable actionBarBackground = new BitmapDrawable(getResources(), bMap);
         ActionBar bar = getSupportActionBar();
+
         bar.setBackgroundDrawable(actionBarBackground);
-    }
-//
-//    public void initializeFragments() {
-//        newsFeedFragment = new NewsFeedFragment();
-//        chatFragment = new ChatFragment();
-//        aboutFragment = new AboutFragment();
-//        profileFragment = new ProfileFragment();
-//        newPostFragment = new NewPostFragment();
-//    }
-    public void updatePosts(List<Post> posts) {
-        newsFeedFragment.updatePosts(posts);
     }
 
     public String getUsername() {
         return username;
     }
+    public void goBackToHomeScreen() {
+        onNavigationDrawerItemSelected(0);
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
@@ -108,17 +107,12 @@ public class HomeActivity extends ActionBarActivity
                 newsFeedFragment.setupFirebaseConnection(serverConnection);
                 break;
             case 1:
-                fragment = new ProfileFragment(); //new ProfileFragment();
-                profileFragment = (ProfileFragment)fragment;
-                profileFragment.initialize(this);
-                break;
-            case 2:
                 fragment = new NewPostFragment();
                 newPostFragment = (NewPostFragment) fragment;
                 newPostFragment.initialize(this);
                 newPostFragment.setupFirebaseConnection(serverConnection);
                 break;
-            case 3:
+            case 2:
 //                fragment = new ChatFragment(); //new ChatFragment();
 //                chatFragment = (ChatFragment)fragment;
 //                chatFragment.initialize(this);
@@ -134,7 +128,7 @@ public class HomeActivity extends ActionBarActivity
 
                 startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_CHANNEL_LIST_ACTIVITY);
                 break;
-            case 4:
+            case 3:
                 fragment = new AboutFragment();
                 aboutFragment = (AboutFragment)fragment;
                 aboutFragment.initialize(this);
