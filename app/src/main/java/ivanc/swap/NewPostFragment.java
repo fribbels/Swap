@@ -1,10 +1,17 @@
 package ivanc.swap;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,6 +23,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -45,7 +57,10 @@ public class NewPostFragment extends Fragment {
     private Button newPostSubmitButton;
     private Button getImageButton;
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private String currentImage = "";
+
+    private static final int REQUEST_IMAGE_GALLERY = 1;
+    private HomeActivity homeActivity;
 
     public NewPostFragment() {
         // Required empty public constructor
@@ -92,46 +107,67 @@ public class NewPostFragment extends Fragment {
         newPostTitleEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(newPostTitleEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-                return handled;
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(newPostTitleEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+            return handled;
             }
         });
 
+
+        newPostDescEditText.setHorizontallyScrolling(false);
+        newPostDescEditText.setMaxLines(Integer.MAX_VALUE);
         newPostDescEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(newPostTitleEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-                return handled;
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(newPostTitleEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+            return handled;
             }
         });
 
         newPostSubmitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String title = newPostTitleEditText.getText().toString();
-                String desc = newPostDescEditText.getText().toString();
-                serverConnection.makePost(new Post(title, desc));
-                Log.v("*********", "TIT:E" + title);
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(newPostTitleEditText.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(newPostDescEditText.getWindowToken(), 0);
+            String title = newPostTitleEditText.getText().toString();
+            String desc = newPostDescEditText.getText().toString();
+
+            String timestamp = DateUtils.getTimestamp();
+
+            serverConnection.makePost(new Post(title, desc, currentImage, serverConnection.getUserid(), homeActivity.getUsername(), timestamp));
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(newPostTitleEditText.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(newPostDescEditText.getWindowToken(), 0);
+
+
+            new AlertDialog.Builder(homeActivity)
+                .setTitle("Post complete")
+                .setMessage("Your post has been submitted!")
+                .setPositiveButton("Back to main screen", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        homeActivity.goBackToHomeScreen();
+                    }
+                })
+                .show();
+
             }
+
         });
 
         getImageButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
+            Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(pickPhoto , REQUEST_IMAGE_GALLERY);//one can be replaced with any action code
             }
         });
+    }
+
+    public void initialize (HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
     }
 
     @Override
@@ -139,21 +175,17 @@ public class NewPostFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         ImageView imageView = (ImageView)getView().findViewById(R.id.new_post_image);
         switch(requestCode) {
-            case 0:
+            case REQUEST_IMAGE_GALLERY:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
                     imageView.setImageURI(selectedImage);
-                }
 
-                break;
-            case 1:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    imageView.setImageURI(selectedImage);
+                    currentImage = ImageStringConverter.getStringFromImageView(imageView);
                 }
                 break;
         }
     }
+
 
     public void setupFirebaseConnection(ServerConnection serverConnection) {
         this.serverConnection = serverConnection;

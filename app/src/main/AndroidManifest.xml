@@ -3,10 +3,13 @@
     package="ivanc.swap">
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo2"
         android:label="@string/app_name"
         android:theme="@style/NavBarTest"
         android:supportsRtl="true">
@@ -24,6 +27,43 @@
             android:label="@string/title_activity_home"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/NavBarTest"/>
+
+        <activity
+            android:name=".SendBirdMessagingActivity"
+            android:label="SendBird"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            >
+        </activity>
+
+        <activity
+            android:name=".SendBirdMemberListActivity"
+            android:label="SendBird"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            >
+        </activity>
+
+        <activity
+            android:name=".SendBirdUserListActivity"
+            android:label="SendBird"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            >
+        </activity>
+
+        <activity
+            android:name=".SendBirdMessagingChannelListActivity"
+            android:label="SendBird"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            >
+        </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="97053a06e09c5adf94f1cab5b63fa61df1bde4c2"
+            />
     </application>
 
 </manifest>

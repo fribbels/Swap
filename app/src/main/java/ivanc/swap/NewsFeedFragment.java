@@ -1,13 +1,20 @@
 package ivanc.swap;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
@@ -15,6 +22,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,8 +49,11 @@ public class NewsFeedFragment extends Fragment {
     private Context context;
     private ListView listView;
     private List<Post> posts;
+    private List<Post> adapterPosts;
     private ServerConnection serverConnection;
+    private HomeActivity homeActivity;
 
+    private static final int REQUEST_SENDBIRD_MESSAGING_ACTIVITY = 200;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -65,39 +76,46 @@ public class NewsFeedFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-
-
-        List<Post> posts = new ArrayList<>();
-        posts.add(new Post("Test"));
-        posts.add(new Post("Extra meatloaf!!!"));
-        posts.add(new Post("Offering 'backrub' ;) ;)"));
-        posts.add(new Post("Winter jacket4sale"));
-        posts.add(new Post("Will mow your lawn. All day long."));
-
-//        this.posts = posts;
     }
 
-    public void updatePosts(List<Post> posts) {
-        this.posts.clear();
-        this.posts.addAll(posts);
-
-        listView.setAdapter(new PostListAdapter(this.context, this.posts));
-        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged(); // Uh?
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        posts = new ArrayList<>();
-        postListAdapter = new PostListAdapter(this.context, this.posts);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_news_feed, container, false);
+
+        posts = new ArrayList<>();
+        adapterPosts = new ArrayList<>();
+
+        postListAdapter = new PostListAdapter(this.context, adapterPosts);
         listView = (ListView) rootView.findViewById(R.id.postListView);
-        listView.setAdapter(this.postListAdapter);
+        listView.setAdapter(postListAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+//
+                AlertDialog.Builder helpBuilder = new AlertDialog.Builder(context);
+                helpBuilder.setPositiveButton("Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing but close the dialog
+                            }
+                        });
+                Display display = homeActivity.getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+
+                // Remember, create doesn't show the dialog
+                ViewDialog alert = new ViewDialog();
+                alert.showDialog(getActivity(), posts.get(position));
+            }
+        });
+        refreshList();
+        listView.requestLayout();
         return rootView;
     }
 
@@ -113,8 +131,15 @@ public class NewsFeedFragment extends Fragment {
     public void onResume() {
         super.onResume();
         this.posts = serverConnection.getPosts(this);
-        postListAdapter = new PostListAdapter(this.context, this.posts);
-        listView.setAdapter(postListAdapter);
+        refreshList();
+    }
+
+    private void refreshList() {
+        adapterPosts.clear();
+        Collections.reverse(posts);
+        adapterPosts.addAll(posts);
+        postListAdapter.notifyDataSetChanged();
+        listView.invalidateViews();
     }
 
     @Override
@@ -131,18 +156,13 @@ public class NewsFeedFragment extends Fragment {
         this.posts = serverConnection.getPosts(this);
     }
 
-    private void refreshList() {
-        serverConnection.getPosts(this);
-        if (this.posts == null) {
-            this.posts = new ArrayList<>();
-        }
-        postListAdapter = new PostListAdapter(getContext(), this.posts);
-        listView.setAdapter(postListAdapter);
+    public void initialize (HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
     }
 
     public void postsArrivedCallback (JsonObject json) {
-        Log.v("**********", "POSTS ARRIVED" + json.toString());
-
+        if (json == null)
+            return;
         JsonArray posts = json.getAsJsonArray("posts");
         List<Post> tempList = new ArrayList<>();
 
@@ -151,12 +171,15 @@ public class NewsFeedFragment extends Fragment {
 
             String title = post.get("title").getAsString();
             String desc = post.get("desc").getAsString();
-            tempList.add(new Post(title, desc));
+            String userid = post.get("userid").getAsString();
+            String image = post.get("image").getAsString();
+            String username = post.get("username").getAsString();
+            String timestamp = post.get("timestamp").getAsString();
+            tempList.add(new Post(title, desc, image, userid, username, timestamp));
         }
 
-        this.posts.clear();
-        this.posts.addAll(tempList);
-        postListAdapter.notifyDataSetChanged();
+        this.posts = tempList;
+        refreshList();
     }
     /**
      * 

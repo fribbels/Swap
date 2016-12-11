@@ -27,6 +27,7 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private HomeActivity homeActivity;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -64,6 +65,10 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
+
+    public void initialize (HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

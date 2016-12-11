@@ -1,12 +1,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" android:exitFadeDuration="@android:integer/config_mediumAnimTime">
     <!-- selected -->
-    <item android:drawable="@drawable/drawericon2" android:state_pressed="true"/>
-    <item android:drawable="@drawable/drawericon2" android:state_focused="true" android:state_pressed="false"/>
-    <item android:drawable="@drawable/drawericon2" android:state_activated="true"/>
-    <item android:drawable="@drawable/drawericon2" android:state_checked="true"/>
-    <item android:drawable="@drawable/drawericon2" android:state_selected="true"/>
+    <item android:drawable="@drawable/bluetop" android:state_pressed="true"/>
+    <item android:drawable="@drawable/bluetop" android:state_focused="true" android:state_pressed="false"/>
+    <item android:drawable="@drawable/bluetop3" android:state_activated="true"/>
+    <item android:drawable="@drawable/bluetop" android:state_checked="true"/>
+    <item android:drawable="@drawable/bluetop" android:state_selected="true"/>
 
 
-    <item android:drawable="@drawable/drawericon2" android:state_activated="false"/>
+    <item android:drawable="@drawable/bluetop" android:state_activated="false"/>
     <item android:drawable="@android:color/transparent" />
 </selector>

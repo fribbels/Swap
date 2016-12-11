@@ -29,6 +29,7 @@ public class AboutFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private HomeActivity homeActivity;
 
     public AboutFragment() {
         // Required empty public constructor
@@ -66,6 +67,10 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_about, container, false);
+    }
+
+    public void initialize (HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

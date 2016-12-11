@@ -2,10 +2,12 @@ package ivanc.swap;
 
 import android.app.Activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -16,6 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 import java.util.List;
 
@@ -47,10 +52,20 @@ public class HomeActivity extends ActionBarActivity
 
     private Fragment currentFragment;
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Fabric.with(this, new Crashlytics());
+        setTitle("Swap");
+        Bundle b = getIntent().getExtras();
+        username = b.getString("username");
+
+        // Set up APIs
         serverConnection = new ServerConnection(this, getApplicationContext());
+
         setContentView(R.layout.activity_home);
 //        initializeFragments();
 
@@ -63,21 +78,18 @@ public class HomeActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.gradientbar);
+        Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.bluetop2);
         BitmapDrawable actionBarBackground = new BitmapDrawable(getResources(), bMap);
         ActionBar bar = getSupportActionBar();
+
         bar.setBackgroundDrawable(actionBarBackground);
     }
-//
-//    public void initializeFragments() {
-//        newsFeedFragment = new NewsFeedFragment();
-//        chatFragment = new ChatFragment();
-//        aboutFragment = new AboutFragment();
-//        profileFragment = new ProfileFragment();
-//        newPostFragment = new NewPostFragment();
-//    }
-    public void updatePosts(List<Post> posts) {
-        newsFeedFragment.updatePosts(posts);
+
+    public String getUsername() {
+        return username;
+    }
+    public void goBackToHomeScreen() {
+        onNavigationDrawerItemSelected(0);
     }
 
     @Override
@@ -91,24 +103,35 @@ public class HomeActivity extends ActionBarActivity
             case 0:
                 fragment = new NewsFeedFragment(); //new NewsFeedFragment();
                 newsFeedFragment = (NewsFeedFragment)fragment;
+                newsFeedFragment.initialize(this);
                 newsFeedFragment.setupFirebaseConnection(serverConnection);
                 break;
             case 1:
-                fragment = new ProfileFragment(); //new ProfileFragment();
-                profileFragment = (ProfileFragment)fragment;
-                break;
-            case 2:
                 fragment = new NewPostFragment();
                 newPostFragment = (NewPostFragment) fragment;
+                newPostFragment.initialize(this);
                 newPostFragment.setupFirebaseConnection(serverConnection);
                 break;
-            case 3:
-                fragment = new ChatFragment(); //new ChatFragment();
-                chatFragment = (ChatFragment)fragment;
+            case 2:
+//                fragment = new ChatFragment(); //new ChatFragment();
+//                chatFragment = (ChatFragment)fragment;
+//                chatFragment.initialize(this);
+
+                final String appId = "6A2C5712-870F-4487-AB31-3EF97B040807"; /* Sample SendBird Application */
+                String userId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                String userName = "User-" + userId.substring(0, 5); /* Generate User Nickname */
+                int REQUEST_SENDBIRD_MESSAGING_CHANNEL_LIST_ACTIVITY = 201;
+
+                Intent intent = new Intent(this, SendBirdMessagingChannelListActivity.class);
+                Bundle args = SendBirdMessagingChannelListActivity.makeSendBirdArgs(appId, userId, userName);
+                intent.putExtras(args);
+
+                startActivityForResult(intent, REQUEST_SENDBIRD_MESSAGING_CHANNEL_LIST_ACTIVITY);
                 break;
-            case 4:
+            case 3:
                 fragment = new AboutFragment();
                 aboutFragment = (AboutFragment)fragment;
+                aboutFragment.initialize(this);
                 break;
             default:
         }
