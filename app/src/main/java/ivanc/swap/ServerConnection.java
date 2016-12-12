@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.cloudinary.utils.ObjectUtils;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -34,6 +35,7 @@ import com.sendbird.android.SendBirdException;
 import android.provider.Settings.Secure;
 
 import static java.security.AccessController.getContext;
+import com.cloudinary.*;
 
 /**
  * Created by ivanc on 12/1/2016.
@@ -48,12 +50,19 @@ public class ServerConnection extends AppCompatActivity {
 
     private String SENDBIRD_APP_ID = "6A2C5712-870F-4487-AB31-3EF97B040807";
     private String android_id;
+    private Cloudinary cloudinary;
 
     public ServerConnection(HomeActivity activity, Context context) {
         this.activity = activity;
         this.context = context;
         localPosts = new ArrayList<>();
+//        cloudinary = new Cloudinary(ObjectUtils.asMap(
+//                "cloud_name", "dg9xrbtal",
+//                "api_key", "741985358596817",
+//                "api_secret", "VltjoXVriCpOEdNJurs-NPD8XsU"));
+//
         android_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+
 //        initSendbird();
     }
 //

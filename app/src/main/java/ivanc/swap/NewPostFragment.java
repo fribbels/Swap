@@ -24,10 +24,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -177,10 +183,29 @@ public class NewPostFragment extends Fragment {
         switch(requestCode) {
             case REQUEST_IMAGE_GALLERY:
                 if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
+                    final Uri selectedImage = imageReturnedIntent.getData();
                     imageView.setImageURI(selectedImage);
 
-                    currentImage = ImageStringConverter.getStringFromImageView(imageView);
+                    final Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                            "cloud_name", "dg9xrbtal",
+                            "api_key", "741985358596817",
+                            "api_secret", "VltjoXVriCpOEdNJurs-NPD8XsU"));
+
+                    Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                InputStream in = homeActivity.getContentResolver().openInputStream(selectedImage);
+                                Map uploadResult = cloudinary.uploader().upload(in, ObjectUtils.emptyMap());
+                                currentImage = (String)uploadResult.get("url");
+                            } catch (IOException e) {
+
+                            }
+                        }
+                    };
+
+                    new Thread(runnable).start();
+                    currentImage = "";
                 }
                 break;
         }

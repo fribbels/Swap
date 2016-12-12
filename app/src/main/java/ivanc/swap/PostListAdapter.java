@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -50,7 +58,7 @@ public class PostListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
 
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.post_row, parent, false);
@@ -60,13 +68,33 @@ public class PostListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Post currentPost = getItem(position);
+        final Post currentPost = getItem(position);
         viewHolder.textViewPostText.setText(currentPost.getTitle());
-//        viewHolder.textViewPostDesc.setText(currentPost.getDescription());
         viewHolder.textViewPostTimestamp.setText(DateUtils.convertISO8601ToTimeAgo(currentPost.getTimestamp()));
-        Bitmap bitmap = ImageStringConverter.getBitmapFromString(currentPost.getImage());
-        viewHolder.imageViewPostImage.setImageBitmap(bitmap);
+
+        System.out.println("???????POSTINGIMG  " + position);
+        System.out.println("???????POSTINGIMG  " + currentPost.getImage());
+
+        new Thread() {
+            public void run() {
+                try {
+                    URL url = new URL(currentPost.getImage());
+                    Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    imageDownloadListener(bitmap, viewHolder);
+                } catch(IOException e) {
+                }
+            }
+        }.start();
         return convertView;
+    }
+
+    public void imageDownloadListener (final Bitmap bitmap, final ViewHolder viewHolder) {
+        Handler refresh = new Handler(Looper.getMainLooper());
+        refresh.post(new Runnable() {
+            public void run() {
+                viewHolder.imageViewPostImage.setImageBitmap(bitmap);
+            }
+        });
     }
 
     /*

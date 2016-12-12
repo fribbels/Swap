@@ -29,7 +29,6 @@ public class NavigationDrawerAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.v("*****************", "getView: " + itemList.size());
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         DrawerItemHolder drawerItemHolder;
         View view = convertView;

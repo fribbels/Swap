@@ -74,4 +74,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
+    compile files('lib/cloudinary-core-1.2.2.jar')
+    compile files('lib/cloudinary-android-1.2.2.jar')
 }

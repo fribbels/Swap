@@ -153,7 +153,6 @@ public class NewsFeedFragment extends Fragment {
 
     public void setupFirebaseConnection(ServerConnection serverConnection) {
         this.serverConnection = serverConnection;
-        this.posts = serverConnection.getPosts(this);
     }
 
     public void initialize (HomeActivity homeActivity) {

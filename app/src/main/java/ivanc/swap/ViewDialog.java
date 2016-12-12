@@ -3,6 +3,8 @@ package ivanc.swap;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -15,11 +17,18 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.net.URL;
+
 /**
  * Created by ivanc on 12/9/2016.
  */
 
 public class ViewDialog {
+
+    public void imageDownloadListener(ImageView imageView, Bitmap bitmap) {
+        imageView.setImageBitmap(bitmap);
+    }
 
     public void showDialog(final Activity activity, Post post){
         final Dialog dialog = new Dialog(activity);
@@ -30,12 +39,25 @@ public class ViewDialog {
         TextView dialogTitle = (TextView) dialog.findViewById(R.id.dialog_title);
         TextView dialogDesc = (TextView) dialog.findViewById(R.id.dialog_desc);
         TextView dialogUsername = (TextView) dialog.findViewById(R.id.dialog_username);
-        ImageView dialogImage = (ImageView) dialog.findViewById(R.id.dialog_image);
+        final ImageView dialogImage = (ImageView) dialog.findViewById(R.id.dialog_image);
 
         dialogTitle.setText(post.getTitle());
         dialogDesc.setText(post.getDescription());
         dialogUsername.setText(post.getUsername());
-        dialogImage.setImageBitmap(ImageStringConverter.getBitmapFromString(post.getImage()));
+
+        final String imageString = post.getImage();
+        new Thread() {
+            public void run() {
+                try {
+                    URL url = new URL(imageString);
+                    Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    imageDownloadListener(dialogImage, bitmap);
+                } catch(IOException e) {
+                }
+            }
+        }.start();
+
+//        dialogImage.setImageBitmap(ImageStringConverter.getBitmapFromString(post.getImage()));
 
         Button backButton = (Button) dialog.findViewById(R.id.dialog_back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
