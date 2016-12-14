@@ -3,4 +3,4 @@ Swap is an app that lets you trade things you don't need for things you actually
 
 ![alt](http://i.imgur.com/QxAyrQC.png)
 ![alt](http://i.imgur.com/FFQFSu6.png)
-![alt](http://i.imgur.com/QxAyrQC.png)
+![alt](http://i.imgur.com/5dsRgh1.png)
